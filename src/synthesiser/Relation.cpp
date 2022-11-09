@@ -197,6 +197,8 @@ std::string DirectRelation::getTypeNamespace() {
         res << "__" << search;
     }
 
+    res << getSessionAffix();
+
     return res.str();
 }
 
@@ -635,6 +637,8 @@ std::string IndirectRelation::getTypeNamespace() {
         res << "__" << search;
     }
 
+    res << getSessionAffix();
+
     return res.str();
 }
 
@@ -1018,6 +1022,8 @@ std::string BrieRelation::getTypeNamespace() {
     for (auto& search : indexSelection.getSearches()) {
         res << "__" << search;
     }
+
+    res << getSessionAffix();
 
     return res.str();
 }
