@@ -459,6 +459,9 @@ int main(int argc, char** argv) {
                         "Generate C++ source code in multiple files, compile to a binary executable, then "
                         "run this "
                         "executable."},
+                {"generate-namespace", 'N', "NS", "", false,
+                        "The namespace of generated C++ source code. Empty name denotes the anonymous "
+                        "namespace."},
                 {"generate", 'g', "FILE", "", false,
                         "Generate C++ source code for the given Datalog program and write it to "
                         "<FILE>. If <FILE> is `-` then stdout is used."},
