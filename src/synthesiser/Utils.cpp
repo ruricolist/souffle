@@ -19,6 +19,9 @@
 #include <sstream>
 #include <string>
 
+#include <sys/types.h>
+#include <unistd.h>
+
 namespace souffle::synthesiser {
 
 std::string toHex(const std::size_t V) {
@@ -26,6 +29,10 @@ std::string toHex(const std::size_t V) {
     std::stringstream s;
     s << std::hex << std::setw(16) << std::setfill('0') << V;
     return s.str();
+}
+
+std::string getSessionAffix() {
+    return "_" + toHex(::getpid());
 }
 
 std::string uniqueCppIdent(const std::string& name, std::size_t maxLength) {
@@ -63,6 +70,8 @@ std::string uniqueCppIdent(const std::string& name, std::size_t maxLength) {
     if (requiresHash) {
         id += "_" + toHex(std::hash<std::string>{}(name));
     }
+    id += getSessionAffix();
+
     return id;
 }
 
