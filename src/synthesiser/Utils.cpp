@@ -36,7 +36,7 @@ std::string getSessionAffix() {
 }
 
 void setSessionAffix(std::string affix) {
-  static sessionAffix = affix;
+  sessionAffix = affix;
 }
 
 std::string uniqueCppIdent(const std::string& name, std::size_t maxLength) {

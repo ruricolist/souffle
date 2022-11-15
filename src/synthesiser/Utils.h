@@ -28,7 +28,7 @@ std::string toHex(const std::size_t value);
 
 std::string getSessionAffix();
 
-void setSessionAffix();
+void setSessionAffix(std::string affix);
 
 /** return a unique C++ identifier for the given str string */
 std::string uniqueCppIdent(const std::string& str, std::size_t maxLength = 1024);
