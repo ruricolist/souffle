@@ -32,7 +32,7 @@ std::string toHex(const std::size_t V) {
 }
 
 std::string getSessionAffix() {
-    return "_" + toHex(::getpid());
+    return sessionAffix;
 }
 
 void setSessionAffix(std::string affix) {
