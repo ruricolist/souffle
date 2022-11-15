@@ -2485,7 +2485,6 @@ void Synthesiser::generateCode(GenDb& db, const std::string& id, bool& withShare
 
     std::string classname = "Sf_" + id;
     setSessionAffix(classname);
-    std::cerr << "New session affix: " << getSessionAffix() << std::endl;
 
     // generate C++ program
     std::string package_gen_version = "SOUFFLE_GENERATOR_VERSION \"";
