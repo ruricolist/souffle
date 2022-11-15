@@ -2484,6 +2484,7 @@ void Synthesiser::generateCode(GenDb& db, const std::string& id, bool& withShare
     withSharedLibrary = false;
 
     std::string classname = "Sf_" + id;
+    setSessionAffix(classname);
 
     // generate C++ program
     std::string package_gen_version = "SOUFFLE_GENERATOR_VERSION \"";

@@ -35,6 +35,10 @@ std::string getSessionAffix() {
     return "_" + toHex(::getpid());
 }
 
+void setSessionAffix(std::string affix) {
+  static sessionAffix = affix;
+}
+
 std::string uniqueCppIdent(const std::string& name, std::size_t maxLength) {
     bool requiresHash = false;
 

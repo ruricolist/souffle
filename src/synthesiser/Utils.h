@@ -21,10 +21,14 @@
 
 namespace souffle::synthesiser {
 
+static std::string sessionAffix = "";
+
 /** return the hexadecimal representation of the given value, 16 characters long. */
 std::string toHex(const std::size_t value);
 
 std::string getSessionAffix();
+
+void setSessionAffix();
 
 /** return a unique C++ identifier for the given str string */
 std::string uniqueCppIdent(const std::string& str, std::size_t maxLength = 1024);
