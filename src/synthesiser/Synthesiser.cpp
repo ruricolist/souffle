@@ -3136,26 +3136,29 @@ void Synthesiser::generateCode(GenDb& db, const std::string& id, bool& withShare
     factory.addDependency(mainClass, true);
     factory.inherits("souffle::ProgramFactory");
     GenFunction& newInstance = factory.addFunction("newInstance", Visibility::Public);
-    newInstance.setRetType("SouffleProgram*");
-    newInstance.body() << "return new " << classname << "();\n";
+    newInstance.setRetType("souffle::SouffleProgram*");
+    newInstance.body() << "return new "
+                       << "souffle"
+                       << "::" << classname << "();\n";
     GenFunction& factoryConstructor = factory.addConstructor(Visibility::Public);
-    factoryConstructor.setNextInitializer("ProgramFactory", "\"" + id + "\"");
+    factoryConstructor.setNextInitializer("souffle::ProgramFactory", "\"" + id + "\"");
 
     std::ostream& hook = mainClass.hooks();
     std::ostream& factory_hook = factory.hooks();
 
     // hidden hooks
     hook << "namespace souffle {\n";
-    hook << "SouffleProgram *newInstance_" << id << "(){return new " << classname << ";}\n";
-    hook << "SymbolTable *getST_" << id << "(SouffleProgram *p){return &reinterpret_cast<" << classname
-         << "*>(p)->getSymbolTable();}\n";
+    hook << "SouffleProgram *newInstance_" << id << "(){return new "
+         << "souffle::" << classname << ";}\n";
+    hook << "SymbolTable *getST_" << id << "(SouffleProgram *p){return &reinterpret_cast<"
+         << "souffle::" << classname << "*>(p)->getSymbolTable();}\n";
 
     hook << "} // namespace souffle\n";
 
     factory_hook << "namespace souffle {\n";
     factory_hook << "\n#ifdef __EMBEDDED_SOUFFLE__\n";
     factory_hook << "extern \"C\" {\n";
-    factory_hook << "factory_" << classname << " __factory_" << classname << "_instance;\n";
+    factory_hook << "souffle::factory_" << classname << " __factory_" << classname << "_instance;\n";
     factory_hook << "}\n";
     factory_hook << "#endif\n";
     factory_hook << "} // namespace souffle\n";
