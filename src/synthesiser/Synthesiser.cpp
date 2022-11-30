@@ -3137,9 +3137,7 @@ void Synthesiser::generateCode(GenDb& db, const std::string& id, bool& withShare
     factory.inherits("souffle::ProgramFactory");
     GenFunction& newInstance = factory.addFunction("newInstance", Visibility::Public);
     newInstance.setRetType("souffle::SouffleProgram*");
-    newInstance.body() << "return new "
-                       << "souffle"
-                       << "::" << classname << "();\n";
+    newInstance.body() << "return new " << db.getNS() << "::" << classname << "();\n";
     GenFunction& factoryConstructor = factory.addConstructor(Visibility::Public);
     factoryConstructor.setNextInitializer("souffle::ProgramFactory", "\"" + id + "\"");
 
@@ -3148,17 +3146,18 @@ void Synthesiser::generateCode(GenDb& db, const std::string& id, bool& withShare
 
     // hidden hooks
     hook << "namespace souffle {\n";
-    hook << "SouffleProgram *newInstance_" << id << "(){return new "
-         << "souffle::" << classname << ";}\n";
-    hook << "SymbolTable *getST_" << id << "(SouffleProgram *p){return &reinterpret_cast<"
-         << "souffle::" << classname << "*>(p)->getSymbolTable();}\n";
+    hook << "SouffleProgram *newInstance_" << id << "(){return new " << db.getNS() << "::" << classname
+         << ";}\n";
+    hook << "SymbolTable *getST_" << id << "(SouffleProgram *p){return &reinterpret_cast<" << db.getNS(false)
+         << "::" << classname << "*>(p)->getSymbolTable();}\n";
 
     hook << "} // namespace souffle\n";
 
     factory_hook << "namespace souffle {\n";
     factory_hook << "\n#ifdef __EMBEDDED_SOUFFLE__\n";
     factory_hook << "extern \"C\" {\n";
-    factory_hook << "souffle::factory_" << classname << " __factory_" << classname << "_instance;\n";
+    factory_hook << db.getNS(false) << "::factory_" << classname << " __factory_" << classname
+                 << "_instance;\n";
     factory_hook << "}\n";
     factory_hook << "#endif\n";
     factory_hook << "} // namespace souffle\n";
@@ -3186,7 +3185,9 @@ void Synthesiser::generateCode(GenDb& db, const std::string& id, bool& withShare
 
     hook << "if (!opt.parse(argc,argv)) return 1;\n";
 
-    hook << "souffle::";
+    if (!db.getNS(false).empty()) {
+        hook << db.getNS(false) << "::";
+    }
     if (glb.config().has("profile")) {
         hook << classname + " obj(opt.getProfileName());\n";
     } else {

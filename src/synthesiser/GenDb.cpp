@@ -102,7 +102,7 @@ GenFunction& GenClass::addConstructor(Visibility v) {
 }
 
 void GenClass::declaration(const GenDb* db, std::ostream& o) const {
-    o << "namespace souffle {\n";
+    o << "namespace " << db->getNS() << " {\n";
 
     o << "class " << name;
     if (inheritance.size() > 0) {
@@ -130,7 +130,7 @@ void GenClass::declaration(const GenDb* db, std::ostream& o) const {
     o << public_o.str();
     o << private_o.str();
     o << "};\n";
-    o << "} // namespace souffle\n";
+    o << "} // namespace " << db->getNS() << "\n";
 }
 
 void GenClass::definition(const GenDb* db, std::ostream& o) const {
@@ -139,12 +139,12 @@ void GenClass::definition(const GenDb* db, std::ostream& o) const {
         o << "#pragma warning(disable: 4100)\n";
         o << "#endif // _MSC_VER\n";
     }
-    o << "namespace souffle {\n";
+    o << "namespace " << db->getNS() << " {\n";
     for (auto& fn : methods) {
         fn->definition(db, o);
         o << "\n";
     }
-    o << "} // namespace souffle\n";
+    o << "} // namespace " << db->getNS() << "\n";
 
     if (ignoreUnusedArgumentWarning) {
         // restore unused argument warning
@@ -153,6 +153,10 @@ void GenClass::definition(const GenDb* db, std::ostream& o) const {
         o << "#endif // _MSC_VER\n";
     }
     o << hiddenHooksStream.str() << "\n";
+}
+
+std::string GenDb::getNS(const bool spaced) const {
+    return spaced ? std::string{" souffle"} : std::string{"souffle"};
 }
 
 GenClass& GenDb::getClass(std::string name, fs::path basename) {
@@ -174,20 +178,20 @@ GenDatastructure& GenDb::getDatastructure(
     return res;
 }
 
-void GenDatastructure::declaration(const GenDb*, std::ostream& o) const {
-    std::string ns = "souffle";
+void GenDatastructure::declaration(const GenDb* db, std::ostream& o) const {
+    std::string ns = db->getNS(false);
     if (namespace_name) {
-        ns += "::" + *namespace_name;
+        ns += (ns.empty() ? "" : "::") + *namespace_name;
     }
     o << "namespace " << ns << " {\n";
     o << declarationStream.str();
     o << "} // namespace " << ns << " \n";
 }
 
-void GenDatastructure::definition(const GenDb*, std::ostream& o) const {
-    std::string ns = "souffle";
+void GenDatastructure::definition(const GenDb* db, std::ostream& o) const {
+    std::string ns = db->getNS(false);
     if (namespace_name) {
-        ns += "::" + *namespace_name;
+        ns += (ns.empty() ? "" : "::") + *namespace_name;
     }
     o << "namespace " << ns << " {\n";
     o << definitionStream.str();
@@ -222,6 +226,7 @@ void GenDb::emitSingleFile(std::ostream& o) {
     o << externCStream.str();
     o << "}\n";
     o << "} //namespace functors\n";
+    o << "using namespace souffle;";
     for (auto& ds : datastructures) {
         ds->declaration(this, o);
         ds->definition(this, o);

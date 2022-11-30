@@ -270,6 +270,8 @@ private:
  */
 class GenDb {
 public:
+    std::string getNS(const bool spaced = true) const;
+
     GenClass& getClass(std::string name, fs::path basename);
     GenDatastructure& getDatastructure(
             std::string name, fs::path basename, std::optional<std::string> namespace_opt);
