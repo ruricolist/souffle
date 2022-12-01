@@ -234,7 +234,7 @@ void GenDb::emitSingleFile(std::ostream& o) {
     o << externCStream.str();
     o << "}\n";
     o << "} //namespace functors\n";
-    o << "using namespace souffle;";
+    o << "using namespace souffle;\n";
     for (auto& ds : datastructures) {
         ds->declaration(this, o);
         ds->definition(this, o);
@@ -280,6 +280,9 @@ std::string GenDb::emitMultipleFilesInDir(fs::path dir, std::vector<fs::path>& t
             cpp << "#include " << dep->getHeader() << "\n";
         }
         cpp << "#include " << gen.getHeader() << "\n";
+
+        hpp << "using namespace souffle;\n";
+        cpp << "using namespace souffle;\n";
     };
 
     for (auto& ds : datastructures) {
