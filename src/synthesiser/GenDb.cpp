@@ -156,7 +156,11 @@ void GenClass::definition(const GenDb* db, std::ostream& o) const {
 }
 
 std::string GenDb::getNS(const bool spaced) const {
-    return spaced ? std::string{" souffle"} : std::string{"souffle"};
+    if (spaced) {
+        return std::string{" "} + ns;
+    } else {
+        return ns;
+    }
 }
 
 GenClass& GenDb::getClass(std::string name, fs::path basename) {
