@@ -304,7 +304,7 @@ public:
 
 private:
     // namespace of the generated code
-    std::string ns = "souffle";
+    std::string ns = "";
     std::vector<Own<GenDatastructure>> datastructures;
     std::vector<Own<GenClass>> classes;
 
