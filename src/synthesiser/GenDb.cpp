@@ -155,6 +155,10 @@ void GenClass::definition(const GenDb* db, std::ostream& o) const {
     o << hiddenHooksStream.str() << "\n";
 }
 
+void GenDb::setNS(std::string ns) {
+    this->ns = ns;
+}
+
 std::string GenDb::getNS(const bool spaced) const {
     if (spaced) {
         return std::string{" "} + ns;

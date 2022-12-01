@@ -466,6 +466,9 @@ int main(Global& glb, int argc, char** argv) {
                 {"generate-many", 'G', "DIR", "", false,
                         "Generate C++ source code in multiple files for the given Datalog program "
                         "and write it to <DIR>."},
+                {"generate-namespace", 'N', "NS", "", false,
+                        "The namespace of generated C++ source code. Empty name denotes the anonymous "
+                        "namespace."},
                 {"inline-exclude", '\x7', "RELATIONS", "", false,
                         "Prevent the given relations from being inlined. Overrides any `inline` qualifiers."},
                 {"swig", 's', "LANG", "", false,

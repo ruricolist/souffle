@@ -2512,6 +2512,12 @@ void Synthesiser::generateCode(GenDb& db, const std::string& id, bool& withShare
         db.addGlobalInclude("\"souffle/profile/ProfileEvent.h\"");
     }
 
+    if (glb.config().has("generate-namespace")) {
+        db.setNS(glb.config().get("generate-namespace"));
+    } else {
+        db.setNS("souffle");
+    }
+
     // produce external definitions for user-defined functors
     std::map<std::string, std::tuple<TypeAttribute, std::vector<TypeAttribute>, bool>> functors;
     visit(prog, [&](const UserDefinedOperator& op) {

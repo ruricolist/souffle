@@ -270,6 +270,8 @@ private:
  */
 class GenDb {
 public:
+    void setNS(std::string ns);
+
     std::string getNS(const bool spaced = true) const;
 
     GenClass& getClass(std::string name, fs::path basename);
