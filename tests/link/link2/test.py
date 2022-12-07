@@ -9,12 +9,14 @@ import tempfile
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("input_dir")
-    parser.add_argument("output_dir")
-    parser.add_argument("cxx")
-    parser.add_argument("souffle")
-    parser.add_argument("driver")
-    parser.add_argument("include")
+    parser.add_argument("--input_dir")
+    parser.add_argument("--output_dir")
+    parser.add_argument("--cxx")
+    parser.add_argument("--souffle")
+    parser.add_argument("--driver")
+    parser.add_argument("--include")
+    parser.add_argument("--namespace", action="store_true")
+    parser.set_defaults(namespace=False)
     parser.add_argument("dls", nargs="+")
 
     args = parser.parse_args()
@@ -46,9 +48,8 @@ def main():
     ns_index = 0
     for dl in dls:
         ns_index += 1
-        subprocess.run(
-            [souffle, "-N", "ns" + str(ns_index), "-g", cpp_file(dl), dl], **redirects
-        )
+        ns_args = ["-N", "ns" + str(ns_index)] if args.namespace else []
+        subprocess.run([souffle] + ns_args + ["-g", cpp_file(dl), dl], **redirects)
     cxx_args = [
         cxx,
         "-I",
