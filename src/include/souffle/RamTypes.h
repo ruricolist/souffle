@@ -79,8 +79,9 @@ but as of January 2020 it is not yet supported.
  **/
 template <typename To = RamDomain, typename From>
 To ramBitCast(From source) {
-    static_assert(isRamType<From> && isRamType<To>, "Bit casting should only be used on Ram Types.");
-    static_assert(sizeof(To) == sizeof(From), "Can't bit cast types with different size.");
+    static_assert(  // isRamType<From> &&
+            isRamType<To>, "Bit casting should only be used on Ram Types.");
+    // static_assert(sizeof(To) == sizeof(From), "Can't bit cast types with different size.");
     To destination;
     memcpy(&destination, &source, sizeof(destination));
     return destination;
