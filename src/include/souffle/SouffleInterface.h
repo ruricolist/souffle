@@ -666,6 +666,17 @@ public:
         return *this;
     }
 
+#if RAM_DOMAIN_SIZE == 32
+    tuple& operator>>(int64_t& integer) {
+        assert(pos < size() && "exceeded tuple's size");
+        assert((*relation.getAttrType(pos) == 'i' || *relation.getAttrType(pos) == 'r' ||
+                       *relation.getAttrType(pos) == '+') &&
+                "wrong element type");
+        integer = ramBitCast<int64_t>(array[pos++]);
+        return *this;
+    }
+#endif
+
     /**
      * Get the "current element" of the tuple as a unsigned, then increment the index giving the current
      * element.
@@ -680,6 +691,15 @@ public:
         return *this;
     }
 
+#if RAM_DOMAIN_SIZE == 32
+    tuple& operator>>(uint64_t& uint) {
+        assert(pos < size() && "exceeded tuple's size");
+        assert((*relation.getAttrType(pos) == 'u') && "wrong element type");
+        uint = ramBitCast<uint64_t>(array[pos++]);
+        return *this;
+    }
+#endif
+
     /**
      * Get the "current element" of the tuple as a float, then increment the index giving the current
      * element.
@@ -693,6 +713,15 @@ public:
         ramFloat = ramBitCast<RamFloat>(array[pos++]);
         return *this;
     }
+
+#if RAM_DOMAIN_SIZE == 32
+    tuple& operator>>(double& ramFloat) {
+        assert(pos < size() && "exceeded tuple's size");
+        assert((*relation.getAttrType(pos) == 'f') && "wrong element type");
+        ramFloat = static_cast<float>(array[pos++]);
+        return *this;
+    }
+#endif
 
     /**
      * Iterator for direct access to tuple's data.
