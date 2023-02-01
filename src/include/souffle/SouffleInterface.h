@@ -586,6 +586,14 @@ public:
         return *this;
     }
 
+#if RAM_DOMAIN_SIZE == 32
+    tuple& operator<<(int64_t integer) {
+        assert(integer <= std::numeric_limits<int32_t>::max() &&
+                integer >= std::numeric_limits<int32_t>::lowest());
+        return *this << static_cast<RamSigned>(integer);
+    }
+#endif
+
     /**
      * Set the "current element" of the tuple to the given uint, then increment the index giving the current
      * element.
@@ -600,6 +608,13 @@ public:
         return *this;
     }
 
+#if RAM_DOMAIN_SIZE == 32
+    tuple& operator<<(uint64_t uint) {
+        assert(uint <= std::numeric_limits<int32_t>::max());
+        return *this << static_cast<RamUnsigned>(uint);
+    }
+#endif
+
     /**
      * Set the "current element" of the tuple to the given float, then increment the index giving the current
      * element.
@@ -613,6 +628,13 @@ public:
         array[pos++] = ramBitCast(ramFloat);
         return *this;
     }
+
+#if RAM_DOMAIN_SIZE == 32
+    tuple& operator<<(double d) {
+        assert(d <= std::numeric_limits<float>::max() && d >= std::numeric_limits<float>::min());
+        return *this << static_cast<float>(d);
+    }
+#endif
 
     /**
      * Get the "current element" of the tuple as a string, then increment the index giving the current
