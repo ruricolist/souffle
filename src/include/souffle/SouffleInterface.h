@@ -842,6 +842,7 @@ public:
      * @return The pointer of the target relation, or null pointer if the relation not found (Relation*)
      */
     Relation* getRelation(const std::string& name) const {
+        std::cerr << "Relation: " << name << std::endl;
         auto it = relationMap.find(name);
         if (it != relationMap.end()) {
             return (*it).second;
